@@ -179,3 +179,78 @@ drawColumn("schart3");
 drawLine("tChart1");
 drawPie("tChart2");
 drawColumn("tChart3");
+
+const drawSVG = (id) => {
+	am4core.useTheme(am4themes_microchart);
+	
+	let chart = am4core.create(id, am4charts.XYChart);
+	chart.padding(0, 0, 0, 0);
+
+	chart.data = [ {
+			"date": new Date(2018, 0, 1, 8, 0, 0),
+			"value": 57
+		}, {
+			"date": new Date(2018, 0, 1, 9, 0, 0),
+			"value": 27
+		}, {
+			"date": new Date(2018, 0, 1, 10, 0, 0),
+			"value": 24
+		}, {
+			"date": new Date(2018, 0, 1, 11, 0, 0),
+			"value": 59
+		}, {
+			"date": new Date(2018, 0, 1, 12, 0, 0),
+			"value": 33
+		}, {
+			"date": new Date(2018, 0, 1, 13, 0, 0),
+			"value": 46
+		}, {
+			"date": new Date(2018, 0, 1, 14, 0, 0),
+			"value": 20
+		}, {
+			"date": new Date(2018, 0, 1, 15, 0, 0),
+			"value": 42
+		}, {
+			"date": new Date(2018, 0, 1, 16, 0, 0),
+			"value": 59,
+		"opacity": 1
+		}
+	];
+
+	let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+	dateAxis.startLocation = 0.5;
+	dateAxis.endLocation = 0.7;
+	dateAxis.renderer.grid.template.disabled = true;
+	dateAxis.renderer.labels.template.disabled = true;
+	dateAxis.cursorTooltipEnabled = false;
+
+	let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+	valueAxis.renderer.grid.template.disabled = true;
+	valueAxis.renderer.baseGrid.disabled = true; // Самая нижняя линия.
+	valueAxis.renderer.labels.template.disabled = true;
+	valueAxis.cursorTooltipEnabled = false;
+
+	var series = chart.series.push(new am4charts.LineSeries());
+	series.dataFields.dateX = "date";
+	series.dataFields.valueY = "value";
+	series.tensionX = 0.8;
+	series.strokeWidth = 2;
+
+	let bullet = series.bullets.push(new am4charts.CircleBullet());
+	bullet.circle.opacity = 0;
+	bullet.circle.propertyFields.opacity = "opacity";
+	bullet.circle.radius = 3;
+	
+	let target = chart.chartAndLegendContainer;
+	let svg = chart.exporting.normalizeSVG(
+	  chart.exporting.serializeElement(target.dom),
+	  {},
+	  target.pixelWidth,
+	  target.pixelHeight,
+	  1
+	);
+	
+	document.getElementById("svgchart").innerHTML += svg;
+};
+
+drawSVG("chartdiv");
